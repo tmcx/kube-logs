@@ -4,9 +4,9 @@ interface Pod {
     namespace: string;
     name: string;
     containers_count: string;
-    state: string;
+    status: string;
     restarts: string;
-    created_at: string;
+    age: string;
 }
 
 export async function getPods(): Promise<Pod[]> {
@@ -19,9 +19,9 @@ export async function getPods(): Promise<Pod[]> {
                 namespace: row[0],
                 name: row[1],
                 containers_count: row[2],
-                state: row[3],
+                status: row[3],
                 restarts: row.slice(4, row.length - 2).join(' '),
-                created_at: row[row.length - 1],
+                age: row[row.length - 1],
             }
             return jsonRow;
         });

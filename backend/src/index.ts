@@ -1,4 +1,5 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import { getNamespacesHandler } from './handlers/getNamespaces';
 import { getPodLogsHandler } from './handlers/getPodLogs';
 import { getPodsHandler } from './handlers/getPods';
 
@@ -8,9 +9,11 @@ const server: FastifyInstance = Fastify({});
 server.get('/ping', async (req, res) => ({ pong: 'it worked!' }));
 
 
+server.get('/namespaces', async (req, res) => await getNamespacesHandler(req, res));
 server.get('/pods', async (req, res) => await getPodsHandler(req, res));
 
 server.get('/pods/:pod_name/logs', async (req, res) => await getPodLogsHandler(req, res));
+
 
 
 
