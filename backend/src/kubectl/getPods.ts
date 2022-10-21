@@ -27,6 +27,7 @@ export async function getPods(): Promise<Pod[]> {
         });
         return jsonPods.slice(0, jsonPods.length - 1);
     } catch (error: any) {
+        console.error(error);
         throw new Error(error);
     }
 }

@@ -8,7 +8,6 @@ export async function getPodLogsHandler(req: FastifyRequest, res: FastifyReply) 
     try {
         const podName = (req.params as any).pod_name;
         const namespace = await getPodNamespace(podName);
-        console.log(podName, namespace);
         if (!namespace) {
             res.code(404);
             res.send({ message: `Not exists pod: ${podName}` });
