@@ -6,6 +6,7 @@ async function getPods(req: FastifyRequest, res: FastifyReply) {
 
     return pods.split('\n').map((line) => {
         const row = line.split(' ').filter((field) => field != ' ');
+        console.log(row);
         return {
             namespace: row[0],
             name: row[1],
