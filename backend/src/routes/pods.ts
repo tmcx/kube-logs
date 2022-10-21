@@ -2,9 +2,10 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { CMD } from "../utils/cmd";
 
 async function getPods(req: FastifyRequest, res: FastifyReply) {
-        res.header("Content-Type", "application/json; charset=utf-8");
+    res.header("Content-Type", "application/json; charset=utf-8");
 
-    CMD.exec('kubectl get pods -A').then((pods) => {
+    try {
+        const pods = await CMD.exec('kubectl get pods -A')
         const jsonPods = pods.split('\n').map((line) => {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
             const jsonRow = {
@@ -18,12 +19,11 @@ async function getPods(req: FastifyRequest, res: FastifyReply) {
             return jsonRow;
         });
         res.code(200);
-        res.send(jsonPods.splice(0, jsonPods.length - 1));
-
-    }).catch((err) => {
+        return jsonPods.splice(0, jsonPods.length - 1);
+    } catch (error) {
         res.code(500);
-        res.send({ message: err });
-    });
+        return { message: error };
+    }
 }
 
 
