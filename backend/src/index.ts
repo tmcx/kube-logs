@@ -11,6 +11,7 @@ server.get('/ping', async (req, res) => ({ pong: 'it worked!' }));
 
 server.get('/pods', async (req, res) => await getPodsHandler(req, res));
 server.get('/pods/logs', async (req, res) => await getPodsLogsHandler(req, res));
+server.get('/pods/logs/:namespace', async (req, res) => await getPodsLogsHandler(req, res));
 
 
 
