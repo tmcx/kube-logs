@@ -5,9 +5,12 @@ interface Log {
     timestamp: string;
 }
 
-export async function getPodLogs(podName: string, podNamespace: string): Promise<Log[]> {
+export async function getPodLogs(podName: string, namespace: string): Promise<Log[]> {
     try {
-        const logs = await CMD.exec(`kubectl logs pod/${podName} -n ${podNamespace}`);
+        const cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps`;
+        console.log(cmd);
+        const logs = await CMD.exec(cmd);
+        console.log(logs);
         const jsonlogs = logs.split('\n').map((line) => {
             const endDateRange = line.indexOf(' ');
             const timestamp = line.slice(0, endDateRange);
