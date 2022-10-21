@@ -11,7 +11,8 @@ interface Pod {
 
 export async function getPods(): Promise<Pod[]> {
     try {
-        const pods = await CMD.exec('kubectl get pods -A');
+        const cmd = 'kubectl get pods -A';
+        const pods = await CMD.exec(cmd);
         const jsonPods = pods.split('\n').map((line) => {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
             const jsonRow = {
