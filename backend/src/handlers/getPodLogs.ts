@@ -3,6 +3,7 @@ import { getPodLogs } from "../kubectl/getPodLogs";
 import { getPodNamespace } from "../kubectl/getPodNamespace";
 
 export async function getPodLogsHandler(req: FastifyRequest, res: FastifyReply) {
+    console.log('getPodLogsHandler');
     res.type('application/json; charset=utf-8');
     try {
         const podName = (req.params as any).pod_name;

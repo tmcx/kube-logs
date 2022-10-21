@@ -3,6 +3,7 @@ import { getPodLogs } from "../kubectl/getPodLogs";
 import { getPods } from "../kubectl/getPods";
 
 export async function getPodsLogsHandler(req: FastifyRequest, res: FastifyReply) {
+    console.log('getPodsLogsHandler');
     res.type('application/json; charset=utf-8');
     try {
         const pods = await getPods();

@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { getPods } from "../kubectl/getPods";
 
 export async function getPodsHandler(req: FastifyRequest, res: FastifyReply) {
+    console.log('getPodsHandler');
     res.type('application/json; charset=utf-8');
     try {
         const pods = await getPods();
