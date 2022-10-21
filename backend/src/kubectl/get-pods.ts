@@ -27,7 +27,6 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
         for (const line of lines) {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
             const containers = await getPodContainers(row[1]);
-            console.log(row);
             const jsonRow = {
                 namespace: row[0],
                 name: row[1],
@@ -36,7 +35,7 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
                     count: row[2]
                 },
                 status: row[3],
-                restarts: row.slice(4, row.length - 2).join(' '),
+                restarts: row.slice(4, row.length - 1).join(' '),
                 age: row[row.length - 1],
             }
             jsonPods.push(jsonRow);
