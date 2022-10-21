@@ -13,9 +13,7 @@ export async function getPodLogs(podName: string, namespace: string): Promise<Lo
         const jsonlogs = logs.split('\n').map((line) => {
             const endDateRange = line.indexOf(' ');
             const timestamp = line.slice(0, endDateRange);
-            console.log(timestamp);
-            const log = line.slice(endDateRange, line.length);
-            console.log(log);
+            const log = line.slice(endDateRange + 1, line.length);;
             return {
                 timestamp,
                 log
