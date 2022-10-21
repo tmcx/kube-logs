@@ -10,11 +10,12 @@ export async function getPodLogs(podName: string, namespace: string): Promise<Lo
         const cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps`;
         console.log(cmd);
         const logs = await CMD.exec(cmd);
-        console.log(logs);
         const jsonlogs = logs.split('\n').map((line) => {
             const endDateRange = line.indexOf(' ');
             const timestamp = line.slice(0, endDateRange);
+            console.log(timestamp);
             const log = line.slice(endDateRange, line.length);
+            console.log(log);
             return {
                 timestamp,
                 log
