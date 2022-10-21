@@ -4,7 +4,7 @@ import { CMD } from "../utils/cmd";
 async function getPods(req: FastifyRequest, res: FastifyReply) {
     const pods = await CMD.exec('kubectl get pods -A');
 
-    return pods.split('\n').map((line) => {
+    const jsonPods = pods.split('\n').map((line) => {
         const row = line.split(' ').filter((field) => field != ' ' && field != '');
         const jsonRow = {
             namespace: row[0],
@@ -14,9 +14,10 @@ async function getPods(req: FastifyRequest, res: FastifyReply) {
             restarts: row[4],
             created_at: row.splice(5, row.length).join(' '),
         }
-        console.log(jsonRow);
         return jsonRow;
     });
+    console.log(jsonPods);
+    return jsonPods.splice(0, jsonPods.length - 1);
 }
 
 
