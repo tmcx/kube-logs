@@ -1,24 +1,21 @@
 import Fastify, { FastifyInstance } from 'fastify';
-import { getNamespacesHandler } from './handlers/getNamespaces';
-import { getNamespacesPodsHandler } from './handlers/getNamespacesPods';
-import { getPodLogsHandler } from './handlers/getPodLogs';
-import { getPodsHandler } from './handlers/getPods';
+import { getLogsRoute } from './routes/logs';
+import { getNamespacesRoute } from './routes/namespaces';
+import { getPodsRoute } from './routes/pods';
+import cors from '@fastify/cors';
 
 
 const server: FastifyInstance = Fastify({});
+server.register(cors);
 
-server.get('/ping', async (req, res) => ({ pong: 'it worked!' }));
+server.addHook('preHandler', (req, res, done) => {
+    res.type('application/json; charset=utf-8');
+    done();
+});
 
-
-server.get('/namespaces', async (req, res) => await getNamespacesHandler(req, res));
-server.get('/namespaces/:namespace/pods', async (req, res) => await getNamespacesPodsHandler(req, res));
-server.get('/pods', async (req, res) => await getPodsHandler(req, res));
-
-server.get('/pods/:pod_name/logs', async (req, res) => await getPodLogsHandler(req, res));
-
-
-
-
+server.route(getLogsRoute);
+server.route(getNamespacesRoute);
+server.route(getPodsRoute);
 
 
 

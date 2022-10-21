@@ -1,4 +1,4 @@
-import { CMD } from "../utils/cmd";
+import { CMD } from '../utils/cmd';
 
 interface Namespace {
     namespace: string;

@@ -1,9 +1,13 @@
-import { CMD } from "../utils/cmd";
+import { CMD } from '../utils/cmd';
+import { getPodContainers } from './get-pod-containers';
 
 interface Pod {
     namespace: string;
     name: string;
-    containers_count: string;
+    containers: {
+        names: string[];
+        count: string;
+    }
     status: string;
     restarts: string;
     age: string;
@@ -11,25 +15,28 @@ interface Pod {
 
 export async function getPods(namespace?: string): Promise<Pod[]> {
     try {
-        const cmd = 'kubectl get pods -A';
+        let cmd = 'kubectl get pods ' + (!!namespace) ? '-n ' + namespace : ' -A';
         const pods = await CMD.exec(cmd);
-        let jsonPods = pods.split('\n').map((line) => {
+
+        const jsonPods = [];
+        for (const line of pods.split('\n')) {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
+            const containers = await getPodContainers(row[1]);
             const jsonRow = {
                 namespace: row[0],
                 name: row[1],
-                containers_count: row[2],
+                containers: {
+                    names: containers,
+                    count: row[2]
+                },
                 status: row[3],
                 restarts: row.slice(4, row.length - 2).join(' '),
                 age: row[row.length - 1],
             }
-            return jsonRow;
-        });
+            jsonPods.push(jsonRow);
+        }
         jsonPods.pop();
         jsonPods.shift();
-        if (!!namespace) {
-            jsonPods = jsonPods.filter((pod) => pod.namespace == namespace);
-        }
         return jsonPods;
     } catch (error: any) {
         console.error(error);
