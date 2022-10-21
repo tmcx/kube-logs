@@ -18,7 +18,9 @@ export async function getPodLogs(podName: string, namespace: string): Promise<Lo
                 log
             }
         });
-        return jsonlogs.slice(0, jsonlogs.length - 1);
+        jsonlogs.pop();
+        jsonlogs.shift();
+        return jsonlogs;
     } catch (error: any) {
         console.error(error);
         throw new Error(error);
