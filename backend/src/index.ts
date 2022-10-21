@@ -20,14 +20,14 @@ server.get('/pods', async (req, res) => {
                 name: row[1],
                 containers_count: row[2],
                 state: row[3],
-                restarts: row.splice(4, row.length - 2).join(' '),
+                restarts: row.slice(4, row.length - 2).join(' '),
                 created_at: row[row.length - 1],
             }
             console.log(jsonRow);
             return jsonRow;
         });
         res.code(200);
-        res.send(jsonPods.splice(0, jsonPods.length - 1));
+        res.send(jsonPods.slice(0, jsonPods.length - 1));
     } catch (error) {
         res.code(500);
         res.send({ message: error });
