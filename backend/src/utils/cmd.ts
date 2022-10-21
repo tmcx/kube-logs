@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 
 async function execFunc(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec(cmd, { maxBuffer: 1024 * 40 }, (error, stdout, stderr) => {
+        exec(cmd, { maxBuffer: 1024 * 9999999 }, (error, stdout, stderr) => {
             if (error) {
                 reject(`error: ${error.message}`);
                 return;
