@@ -1,10 +1,27 @@
+import { exec } from 'child_process';
 
 
-async function exec(cmd: string) {
-    console.log(cmd);
-}
+async function execFunc(cmd: string):Promise<string> {
+    return new Promise((resolve, reject) => {
+        exec(cmd, (error, stdout, stderr) => {
+            if (error) {
+                reject(`error: ${error.message}`);
+                return;
+            }
 
-const CMD = { exec };
+            if (stderr) {
+                reject(`stderr: ${stderr}`);
+                return;
+            }
+            resolve(stdout);
+        });
+    });
+};
+
+const CMD = {
+    exec: execFunc
+};
+
 export {
     CMD
 };
