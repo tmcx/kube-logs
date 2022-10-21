@@ -6,15 +6,16 @@ async function getPods(req: FastifyRequest, res: FastifyReply) {
 
     return pods.split('\n').map((line) => {
         const row = line.split(' ').filter((field) => field != ' ' && field != '');
-        console.log(row);
-        return {
+        const jsonRow = {
             namespace: row[0],
             name: row[1],
             containers_count: row[2],
             state: row[3],
             restarts: row[4],
-            created_at: row[5]
+            created_at: row.splice(5, row.length).join(' '),
         }
+        console.log(jsonRow);
+        return jsonRow;
     });
 }
 
