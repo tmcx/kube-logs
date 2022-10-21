@@ -19,8 +19,8 @@ server.get('/pods', async (req, res) => {
                 name: row[1],
                 containers_count: row[2],
                 state: row[3],
-                restarts: row[4],
-                created_at: row.splice(5, row.length).join(' '),
+                restarts: row.splice(4, row.length).join(' '),
+                created_at: row[row.length - 1],
             }
             return jsonRow;
         });
