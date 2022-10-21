@@ -20,7 +20,11 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
         const pods = await CMD.exec(cmd);
 
         const jsonPods = [];
-        for (const line of pods.split('\n')) {
+        const lines = pods.split('\n');
+        lines.pop();
+        lines.shift();
+
+        for (const line of lines) {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
             const containers = await getPodContainers(row[1]);
             const jsonRow = {
@@ -36,8 +40,6 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
             }
             jsonPods.push(jsonRow);
         }
-        jsonPods.pop();
-        jsonPods.shift();
         return jsonPods;
     } catch (error: any) {
         console.error(error);
