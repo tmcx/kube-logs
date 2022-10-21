@@ -14,7 +14,7 @@ export async function getPodLogsHandler(req: FastifyRequest, res: FastifyReply) 
             return;
         }
 
-        const logs = getPodLogs(podName, namespace);
+        const logs = await getPodLogs(podName, namespace);
         res.code(200);
         res.send(logs);
     } catch (error) {
