@@ -15,7 +15,8 @@ interface Pod {
 
 export async function getPods(namespace?: string): Promise<Pod[]> {
     try {
-        let cmd = 'kubectl get pods ' + (!!namespace) ? '-n ' + namespace : ' -A';
+        let cmd = `kubectl get pods ${(!!namespace) ? '-n ' + namespace : '-A'}`;
+        console.log(cmd);
         const pods = await CMD.exec(cmd);
 
         const jsonPods = [];
