@@ -7,7 +7,7 @@ interface Log {
 
 export async function getPodLogs(podName: string, namespace: string): Promise<Log[]> {
     try {
-        const cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps`;
+        const cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps --all-containers`;
         const logs = await CMD.exec(cmd);
         const jsonlogs = logs.split('\n').map((line) => {
             const endDateRange = line.indexOf(' ');
