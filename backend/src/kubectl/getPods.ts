@@ -9,11 +9,11 @@ interface Pod {
     age: string;
 }
 
-export async function getPods(): Promise<Pod[]> {
+export async function getPods(namespace?: string): Promise<Pod[]> {
     try {
         const cmd = 'kubectl get pods -A';
         const pods = await CMD.exec(cmd);
-        const jsonPods = pods.split('\n').map((line) => {
+        let jsonPods = pods.split('\n').map((line) => {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
             const jsonRow = {
                 namespace: row[0],
@@ -27,6 +27,9 @@ export async function getPods(): Promise<Pod[]> {
         });
         jsonPods.pop();
         jsonPods.shift();
+        if (!!namespace) {
+            jsonPods = jsonPods.filter((pod) => pod.namespace == namespace);
+        }
         return jsonPods;
     } catch (error: any) {
         console.error(error);
