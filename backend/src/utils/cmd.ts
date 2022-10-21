@@ -1,9 +1,9 @@
 import { exec } from 'child_process';
 
 
-async function execFunc(cmd: string):Promise<string> {
+async function execFunc(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => {
-        exec(cmd, (error, stdout, stderr) => {
+        exec(cmd, { maxBuffer: 1024 * 40 }, (error, stdout, stderr) => {
             if (error) {
                 reject(`error: ${error.message}`);
                 return;
