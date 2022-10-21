@@ -14,14 +14,16 @@ server.get('/pods', async (req, res) => {
         const pods = await CMD.exec('kubectl get pods -A')
         const jsonPods = pods.split('\n').map((line) => {
             const row = line.split(' ').filter((field) => field != ' ' && field != '');
+            console.log(row);
             const jsonRow = {
                 namespace: row[0],
                 name: row[1],
                 containers_count: row[2],
                 state: row[3],
-                restarts: row.splice(4, row.length).join(' '),
+                restarts: row.splice(4, row.length - 2).join(' '),
                 created_at: row[row.length - 1],
             }
+            console.log(jsonRow);
             return jsonRow;
         });
         res.code(200);
