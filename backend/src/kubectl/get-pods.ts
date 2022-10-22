@@ -22,7 +22,8 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
 
 
         for (const pod of podsRaw.items) {
-            const containers = await pod.status.containerStatuses
+            console.log(pod.status);
+            const containers = pod.status.containerStatuses
                 .map((containerStatus: any) => {
 
                     const status = Object.keys(containerStatus.state)[0];
