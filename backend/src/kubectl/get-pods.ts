@@ -1,3 +1,4 @@
+import { mockPodsRaw } from '../mock/pods.raw';
 import { CMD } from '../utils/cmd';
 import { getPodContainers } from './get-pod-containers';
 
@@ -5,38 +6,39 @@ interface Pod {
     namespace: string;
     name: string;
     containers: {
-        names: string[];
-        count: string;
-    }
-    status: string;
-    restarts: string;
-    age: string;
+        restarts_count: string;
+        started_at: string;
+        status: string;
+        name: string;
+    }[]
 }
 
 export async function getPods(namespace?: string): Promise<Pod[]> {
     try {
-        let cmd = `kubectl get pods ${(!!namespace) ? '-n ' + namespace : '-A'}`;
+        let cmd = `kubectl get pods ${(!!namespace) ? '-n ' + namespace : '-A'} -o json`;
         console.log(cmd);
-        const pods = await CMD.exec(cmd);
+        const podsRaw = JSON.parse(await CMD.exec(cmd));
 
         const jsonPods = [];
-        const lines = pods.split('\n');
-        lines.pop();
-        lines.shift();
 
-        for (const line of lines) {
-            const row = line.split(' ').filter((field) => field != ' ' && field != '');
-            const containers = await getPodContainers(row[1]);
+
+
+        for (const pod of podsRaw.items) {
+            const containers = await pod.status.containerStatuses
+                .map((containerStatus: any) => {
+
+                    const status = Object.keys(containerStatus.state)[0];
+                    return {
+                        restarts_count: containerStatus.restartCount,
+                        started_at: containerStatus.state[status].startedAt,
+                        name: containerStatus.name,
+                        status
+                    }
+                });
             const jsonRow = {
-                namespace: row[0],
-                name: row[1],
-                containers: {
-                    names: containers,
-                    count: row[2]
-                },
-                status: row[3],
-                restarts: row.slice(4, row.length - 1).join(' '),
-                age: row[row.length - 1],
+                namespace: pod.metadata.namespace,
+                name: pod.metadata.name,
+                containers
             }
             jsonPods.push(jsonRow);
         }
