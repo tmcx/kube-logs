@@ -1,6 +1,4 @@
-import { mockPodsRaw } from '../mock/pods.raw';
 import { CMD } from '../utils/cmd';
-import { getPodContainers } from './get-pod-containers';
 
 interface Pod {
     namespace: string;
