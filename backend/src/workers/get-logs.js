@@ -7,7 +7,7 @@ process.on('message', async function (config) {
     if (!!config?.since) {
         cmd += ` --since ${config.since}`;
     }
-    const logs = execCmd(cmd);
+    const logs = await execCmd(cmd);
     let jsonLogs = {};
 
     let logsSplitted = logs.split('\n');
