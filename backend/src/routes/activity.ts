@@ -9,10 +9,12 @@ const getActivityRoute: RouteOptions = {
     handler: async (req: FastifyRequest, res: FastifyReply) => {
         try {
             const since = Number((req.query as any).since) || 1;
+            const namespace = (req.query as any).namespace || undefined;
             const sinceTime = new Date(new Date().getTime() - (since * 1000)).toISOString();
 
             const groupBy = Number((req.query as any).group_by) || 10;
-            const pods = await getPods();
+            console.log(typeof groupBy, groupBy);
+            const pods = await getPods(namespace);
             const activePodsLogs: { [key: string]: Logs } = {};
             const totalPods = pods.length;
             console.log('Total pods: ', totalPods);
