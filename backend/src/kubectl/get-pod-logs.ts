@@ -21,7 +21,7 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
 
         const jsonlogs: Logs = {};
         for (const containerName of containers) {
-            let child = fork('../workers/get-logs.js');
+            let child = fork(__dirname + '/../workers/get-logs.js');
             new Promise<Log>((resolve, reject) => {
                 child.on('message', function (message: any) {
                     console.log(typeof message, message);
