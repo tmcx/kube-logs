@@ -25,6 +25,7 @@ const getActivityRoute: RouteOptions = {
             for (const group of groupOfPods) {
                 const promises = group.map((pod) =>
                     new Promise<void>(async (resolve, reject) => {
+                        console.log(pod.name);
                         const podLogs = await getPodLogs(pod, pod.namespace, sinceTime);
                         if (Object.keys(podLogs).length > 0) {
                             activePodsLogs[pod.name] = podLogs;
