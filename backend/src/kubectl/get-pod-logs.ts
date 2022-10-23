@@ -1,8 +1,10 @@
 import { CMD } from '../utils/cmd';
 import { getPodContainers } from './get-pod-containers';
 import { Pod } from './get-pods';
+import { fork } from 'child_process';
 
-type Logs = { [key: string]: { [key: number]: string } };
+type Log = { [key: number]: string }
+export type Logs = { [key: string]: Log };
 
 export async function getPodLogs(pod: Pod | string, namespace: string, since: string = ''): Promise<Logs> {
     try {
@@ -19,26 +21,18 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
 
         const jsonlogs: Logs = {};
         for (const containerName of containers) {
+            let child = fork('../workers/get-logs.js');
+            new Promise<Log>((resolve, reject) => {
+                child.on('message', function (message: any) {
+                    console.log(typeof message, message);
+                    resolve(message);
+                });
+                child.send({ podName, namespace, containerName, since });
 
-            let cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps --container ${containerName}`;
-            if (!!since) {
-                cmd += ` --since ${since}`;
-            }
+            }).then((logs) => {
+                jsonlogs[containerName] = logs;
+            })
 
-            const logs = await CMD.exec(cmd);
-            // jsonlogs[containerName] = {};
-
-            // let logsSplitted = logs.split('\n');
-            // logsSplitted.pop();
-            // logsSplitted.shift();
-
-            // for (const line of logs.split('\n')) {
-            //     const endDateRange = line.indexOf(' ');
-            //     const timestamp = line.slice(0, endDateRange);
-            //     const log = line.slice(endDateRange + 1, line.length);
-            //     const key = new Date(timestamp).getTime();
-            //     jsonlogs[containerName][key] = log;
-            // }
         }
         return jsonlogs;
     } catch (error: any) {
