@@ -21,15 +21,14 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
         const jsonlogs: Logs = {};
         for (const containerName of containers) {
             let child = fork(__dirname + '/../workers/get-logs.js');
-            new Promise<Log>((resolve, reject) => {
+            const logs = await new Promise<Log>((resolve, reject) => {
                 child.on('message', function (message: any) {
                     resolve(message);
                 });
                 child.send({ podName, namespace, containerName, since });
 
-            }).then((logs) => {
-                jsonlogs[containerName] = logs;
-            });
+            })
+            jsonlogs[containerName] = logs;
         }
 
         return jsonlogs;
