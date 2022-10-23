@@ -8,9 +8,9 @@ const getActivityRoute: RouteOptions = {
     url: '/activity',
     handler: async (req: FastifyRequest, res: FastifyReply) => {
         try {
-            const since = Number((req.query as any).since) || 1;
+            const since = Number((req.query as any).min_since) || 1;
             const namespace = (req.query as any).namespace || undefined;
-            const sinceTime = new Date(new Date().getTime() - (since * 1000)).toISOString();
+            const sinceTime = new Date((new Date().getTime() - (since * 1000)) + (5 * 60 * 60 * 1000)).toISOString();
 
             const groupBy = Number((req.query as any).group_by) || 10;
             console.log(typeof groupBy, groupBy, (req.query as any).group_by);
