@@ -18,6 +18,9 @@ process.on('message', async function (config) {
         const timestamp = line.slice(0, endDateRange);
         const log = line.slice(endDateRange + 1, line.length);
         const key = new Date(timestamp).getTime();
+        if (key == NaN) {
+            console.log(timestamp, line);
+        }
         jsonLogs[key] = log;
     }
 
