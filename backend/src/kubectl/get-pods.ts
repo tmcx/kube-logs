@@ -19,11 +19,7 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
 
         const jsonPods = [];
 
-
-
         for (const pod of podsRaw.items) {
-            console.log(pod.metadata.name);
-            console.log(pod.status);
             const containers = pod.spec.containers
                 .map((container:any) => {
                     const containerStatus = pod
@@ -56,6 +52,6 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
         return jsonPods;
     } catch (error: any) {
         console.error(error);
-        throw new Error(error);
+        throw new Error(JSON.stringify(error));
     }
 }
