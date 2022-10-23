@@ -1,6 +1,6 @@
 const exec = require('child_process').exec;
 
-export async function execCmd(cmd) {
+module.exports = async function execCmd(cmd) {
     return new Promise((resolve, reject) => {
         exec(cmd, { maxBuffer: 1024 * 9999999 }, (error, stdout, stderr) => {
             if (error) {
