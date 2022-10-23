@@ -28,6 +28,6 @@ process.on('message', async function (config) {
         }
     }
 
-    process.send(haveContent ? jsonLogs : null);
+    process.send(haveContent ? jsonLogs : {});
     process.disconnect();
 });
