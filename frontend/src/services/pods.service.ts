@@ -4,12 +4,11 @@ export interface Pod {
     namespace: string;
     name: string;
     containers: {
-        names: string[];
-        count: string;
-    }
-    status: string;
-    restarts: string;
-    age: string;
+        restarts_count: string;
+        started_at: string;
+        status: string;
+        name: string;
+    }[];
 }
 
 export class PodsService {
