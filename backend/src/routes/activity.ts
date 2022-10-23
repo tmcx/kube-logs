@@ -19,7 +19,7 @@ const getActivityRoute: RouteOptions = {
             const totalPods = pods.length;
             console.log('Total pods: ', totalPods);
             let i = 1;
-
+            console.log(sinceTime);
             const groupOfPods = groupByN<Pod>(groupBy, pods);
 
             for (const group of groupOfPods) {
