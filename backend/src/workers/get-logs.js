@@ -20,6 +20,7 @@ process.on('message', async function (config) {
         const key = new Date(timestamp).getTime();
         jsonLogs[key] = log;
     }
+
     process.send(jsonLogs);
     process.disconnect();
 });
