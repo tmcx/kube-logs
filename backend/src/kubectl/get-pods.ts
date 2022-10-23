@@ -1,6 +1,6 @@
 import { CMD } from '../utils/cmd';
 
-interface Pod {
+export interface Pod {
     namespace: string;
     name: string;
     containers: {

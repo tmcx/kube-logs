@@ -1,15 +1,17 @@
 import { CMD } from '../utils/cmd';
 import { getPodContainers } from './get-pod-containers';
+import { Pod } from './get-pods';
 
 type Logs = { [key: string]: { [key: number]: string } };
 
-export async function getPodLogs(podName: string, namespace: string, since: string = ''): Promise<Logs> {
+export async function getPodLogs(pod: Pod | string, namespace: string, since: string = ''): Promise<Logs> {
     try {
-        const containers = await getPodContainers(podName);
+
+        const containers = (typeof pod == 'string') ? await getPodContainers(pod) : pod.containers.map((container) => container.name);
         const jsonlogs: Logs = {};
         for (const containerName of containers) {
 
-            let cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps --container ${containerName}`;
+            let cmd = `kubectl logs pod/${pod} -n ${namespace} --timestamps --container ${containerName}`;
             if (!!since) {
                 cmd += ` --since ${since}`;
             }
