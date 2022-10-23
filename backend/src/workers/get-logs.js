@@ -2,7 +2,6 @@ const execCmd = require('./exec');
 
 process.on('message', async function (config) {
 
-    console.log(typeof config, config);
     let cmd = `kubectl logs pod/${config.podName} -n ${config.namespace} --timestamps --container ${config.containerName}`;
     if (!!config?.since) {
         cmd += ` --since ${config.since}`;
