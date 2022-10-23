@@ -8,7 +8,7 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
     try {
         let containers = [];
         let podName = '';
-        
+
         if (typeof pod == 'string') {
             containers = await getPodContainers(pod);
             podName = pod;
@@ -25,20 +25,20 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
                 cmd += ` --since ${since}`;
             }
 
-            const logs = await CMD.exec(cmd);
-            jsonlogs[containerName] = {};
+            // const logs = await CMD.exec(cmd);
+            // jsonlogs[containerName] = {};
 
-            let logsSplitted = logs.split('\n');
-            logsSplitted.pop();
-            logsSplitted.shift();
+            // let logsSplitted = logs.split('\n');
+            // logsSplitted.pop();
+            // logsSplitted.shift();
 
-            for (const line of logs.split('\n')) {
-                const endDateRange = line.indexOf(' ');
-                const timestamp = line.slice(0, endDateRange);
-                const log = line.slice(endDateRange + 1, line.length);
-                const key = new Date(timestamp).getTime();
-                jsonlogs[containerName][key] = log;
-            }
+            // for (const line of logs.split('\n')) {
+            //     const endDateRange = line.indexOf(' ');
+            //     const timestamp = line.slice(0, endDateRange);
+            //     const log = line.slice(endDateRange + 1, line.length);
+            //     const key = new Date(timestamp).getTime();
+            //     jsonlogs[containerName][key] = log;
+            // }
         }
         return jsonlogs;
     } catch (error: any) {
