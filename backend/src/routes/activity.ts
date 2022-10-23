@@ -10,26 +10,27 @@ const getActivityRoute: RouteOptions = {
         try {
 
             const since = (req.query as any).since || '1m';
+            const groupBy = (req.query as any).group_by || 10;
             const pods = await getPods();
             const activePodsLogs: Logs[] = [];
             const totalPods = pods.length;
             console.log('Total pods: ', totalPods);
             let i = 1;
 
-            const groupOfPods = groupByN(10, pods);
+            const groupOfPods = groupByN(groupBy, pods);
 
             for (const group of groupOfPods) {
-                const promises = group.map((pod) => {
+                const promises = group.map((pod) =>
                     new Promise<void>(async (resolve, reject) => {
                         const podLogs = await getPodLogs(pod, pod.namespace, since);
                         activePodsLogs.push(podLogs);
+                        resolve();
                         i++;
-                    })
-                });
+                    }));
                 await Promise.all(promises);
                 console.log(i, 'of', totalPods);
             }
-
+            console.log(activePodsLogs);
             res.code(200);
             res.send(activePodsLogs);
         } catch (error) {
