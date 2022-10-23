@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, RouteOptions } from 'fastify';
 import { getPodLogs, Logs } from '../kubectl/get-pod-logs';
-import { getPods } from '../kubectl/get-pods';
+import { getPods, Pod } from '../kubectl/get-pods';
 import { groupByN } from '../utils/group';
 
 const getActivityRoute: RouteOptions = {
@@ -12,18 +12,18 @@ const getActivityRoute: RouteOptions = {
             const since = (req.query as any).since || '1m';
             const groupBy = (req.query as any).group_by || 10;
             const pods = await getPods();
-            const activePodsLogs: Logs[] = [];
+            const activePodsLogs: { [key: string]: Logs } = {};
             const totalPods = pods.length;
             console.log('Total pods: ', totalPods);
             let i = 1;
 
-            const groupOfPods = groupByN(groupBy, pods);
+            const groupOfPods = groupByN<Pod>(groupBy, pods);
 
             for (const group of groupOfPods) {
                 const promises = group.map((pod) =>
                     new Promise<void>(async (resolve, reject) => {
                         const podLogs = await getPodLogs(pod, pod.namespace, since);
-                        activePodsLogs.push(podLogs);
+                        activePodsLogs[pod.name] = (podLogs);
                         resolve();
                         i++;
                     }));
