@@ -25,7 +25,7 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
                 cmd += ` --since ${since}`;
             }
 
-            // const logs = await CMD.exec(cmd);
+            const logs = await CMD.exec(cmd);
             // jsonlogs[containerName] = {};
 
             // let logsSplitted = logs.split('\n');
