@@ -35,7 +35,7 @@ const getActivityRoute: RouteOptions = {
                 await Promise.all(promises);
                 console.log(i, 'of', totalPods);
             }
-            console.log(activePodsLogs);
+            console.log(Object.keys(activePodsLogs).length);
             res.code(200);
             res.send(activePodsLogs);
         } catch (error) {
