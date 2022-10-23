@@ -13,6 +13,8 @@ process.on('message', async function (config) {
     logsSplitted.pop();
     logsSplitted.shift();
 
+    let haveContent = false;
+
     for (const line of logs.split('\n')) {
         const endDateRange = line.indexOf(' ');
         const timestamp = line.slice(0, endDateRange);
@@ -20,9 +22,12 @@ process.on('message', async function (config) {
         const key = new Date(timestamp).getTime();
         if (!Number.isNaN(key)) {
             jsonLogs[key] = log;
+            if (!haveContent) {
+                haveContent = true;
+            }
         }
     }
 
-    process.send(jsonLogs);
+    process.send(haveContent ? jsonLogs : null);
     process.disconnect();
 });
