@@ -13,7 +13,7 @@ const getActivityRoute: RouteOptions = {
             const sinceTime = new Date(new Date().getTime() - (since * 1000)).toISOString();
 
             const groupBy = Number((req.query as any).group_by) || 10;
-            console.log(typeof groupBy, groupBy);
+            console.log(typeof groupBy, groupBy, (req.query as any).group_by);
             const pods = await getPods(namespace);
             const activePodsLogs: { [key: string]: Logs } = {};
             const totalPods = pods.length;
