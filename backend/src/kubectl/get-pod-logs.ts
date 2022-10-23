@@ -30,7 +30,7 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
                 child.send({ podName, namespace, containerName, since });
 
             })
-            if (Object(logs).length > 0 && !haveLogs) {
+            if (Object.keys(logs).length > 0 && !haveLogs) {
                 haveLogs = true;
             }
             jsonlogs[containerName] = logs;
