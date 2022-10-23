@@ -1,8 +1,6 @@
-const execCmd = require('./exec').execCmd;
+const execCmd = require('./exec');
 
-process.on('message', async function (message) {
-
-    const config = (typeof message == 'string') ? JSON.parse(message) : message;
+process.on('message', async function (config) {
 
     console.log(typeof config, config);
     let cmd = `kubectl logs pod/${config.podName} -n ${config.namespace} --timestamps --container ${config.containerName}`;
