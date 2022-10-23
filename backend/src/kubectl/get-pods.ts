@@ -1,3 +1,4 @@
+import { mockPodsRaw } from '../mock/pods.raw';
 import { CMD } from '../utils/cmd';
 
 interface Pod {
@@ -24,14 +25,25 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
         for (const pod of podsRaw.items) {
             console.log(pod.metadata.name);
             console.log(pod.status);
-            const containers = pod.status.containerStatuses
-                .map((containerStatus: any) => {
+            const containers = pod.spec.containers
+                .map((container:any) => {
+                    const containerStatus = pod
+                        .status
+                        ?.containerStatuses
+                        ?.find((containerStatus:any) => containerStatus.name == container.name);
 
-                    const status = Object.keys(containerStatus.state)[0];
+                    let status = 'unknown';
+                    let started_at = 'unknown';
+                    let restarts_count = 'unknown';
+                    if (containerStatus) {
+                        status = Object.keys(containerStatus.state)[0];
+                        started_at = containerStatus.state[status].startedAt;
+                        restarts_count = containerStatus.restartCount;
+                    }
                     return {
-                        restarts_count: containerStatus.restartCount,
-                        started_at: containerStatus.state[status].startedAt,
-                        name: containerStatus.name,
+                        name: container.name,
+                        restarts_count,
+                        started_at,
                         status
                     }
                 });
