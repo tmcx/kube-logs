@@ -8,8 +8,9 @@ const getActivityRoute: RouteOptions = {
     url: '/activity',
     handler: async (req: FastifyRequest, res: FastifyReply) => {
         try {
+            const since = Number((req.query as any).since) || 1;
+            const sinceTime = new Date(new Date().getTime() - (since * 1000)).toISOString();
 
-            const since = (req.query as any).since || '1m';
             const groupBy = (req.query as any).group_by || 10;
             const pods = await getPods();
             const activePodsLogs: { [key: string]: Logs } = {};
@@ -22,7 +23,7 @@ const getActivityRoute: RouteOptions = {
             for (const group of groupOfPods) {
                 const promises = group.map((pod) =>
                     new Promise<void>(async (resolve, reject) => {
-                        const podLogs = await getPodLogs(pod, pod.namespace, since);
+                        const podLogs = await getPodLogs(pod, pod.namespace, sinceTime);
                         if (Object(podLogs).length > 0) {
                             activePodsLogs[pod.name] = podLogs;
                         }
