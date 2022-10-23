@@ -11,10 +11,14 @@ const getActivityRoute: RouteOptions = {
             const since = (req.query as any).since || '1m';
             const pods = await getPods();
             const activePodsLogs = [];
-
+            const total = pods.length;
+            console.log('Total pods: ',total);
+            let i = 1;
             for (const pod of pods) {
                 const podLogs = await getPodLogs(pod.name, pod.namespace, since);
                 activePodsLogs.push(podLogs);
+                console.log(i, 'of', total);
+                i++;
             }
 
             res.code(200);
