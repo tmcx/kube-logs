@@ -15,7 +15,7 @@ const getActivityRoute: RouteOptions = {
             console.log('Total pods: ',total);
             let i = 1;
             for (const pod of pods) {
-                const podLogs = await getPodLogs(pod.name, pod.namespace, since);
+                const podLogs = await getPodLogs(pod, pod.namespace, since);
                 activePodsLogs.push(podLogs);
                 console.log(i, 'of', total);
                 i++;
