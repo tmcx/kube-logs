@@ -6,7 +6,7 @@ type Logs = { [key: string]: { [key: number]: string } };
 
 export async function getPodLogs(pod: Pod | string, namespace: string, since: string = ''): Promise<Logs> {
     try {
-
+        console.log(typeof pod);
         const containers = (typeof pod == 'string') ? await getPodContainers(pod) : pod.containers.map((container) => container.name);
         const jsonlogs: Logs = {};
         for (const containerName of containers) {
