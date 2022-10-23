@@ -6,11 +6,21 @@ type Logs = { [key: string]: { [key: number]: string } };
 
 export async function getPodLogs(pod: Pod | string, namespace: string, since: string = ''): Promise<Logs> {
     try {
-        const containers = (typeof pod == 'string') ? await getPodContainers(pod) : pod.containers.map((container) => container.name);
+        let containers = [];
+        let podName = '';
+        
+        if (typeof pod == 'string') {
+            containers = await getPodContainers(pod);
+            podName = pod;
+        } else {
+            containers = pod.containers.map((container) => container.name);
+            podName = pod.name;
+        }
+
         const jsonlogs: Logs = {};
         for (const containerName of containers) {
 
-            let cmd = `kubectl logs pod/${pod} -n ${namespace} --timestamps --container ${containerName}`;
+            let cmd = `kubectl logs pod/${podName} -n ${namespace} --timestamps --container ${containerName}`;
             if (!!since) {
                 cmd += ` --since ${since}`;
             }
