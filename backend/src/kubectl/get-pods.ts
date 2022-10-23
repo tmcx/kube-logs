@@ -1,4 +1,3 @@
-import { mockPodsRaw } from '../mock/pods.raw';
 import { CMD } from '../utils/cmd';
 
 interface Pod {
