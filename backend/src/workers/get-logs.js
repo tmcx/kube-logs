@@ -18,10 +18,9 @@ process.on('message', async function (config) {
         const timestamp = line.slice(0, endDateRange);
         const log = line.slice(endDateRange + 1, line.length);
         const key = new Date(timestamp).getTime();
-        if (Number.isNaN(key)) {
-            console.log(config.podName, timestamp, line);
+        if (!Number.isNaN(key)) {
+            jsonLogs[key] = log;
         }
-        jsonLogs[key] = log;
     }
 
     process.send(jsonLogs);
