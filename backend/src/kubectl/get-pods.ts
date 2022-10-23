@@ -36,6 +36,7 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
                         restarts_count = containerStatus.restartCount;
                     }
                     return {
+                        resources:container.resources,
                         name: container.name,
                         restarts_count,
                         started_at,
