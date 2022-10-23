@@ -1,4 +1,4 @@
-import { execCmd } from './exec';
+const execCmd = require('./exec').execCmd;
 
 process.on('message', async function (message) {
 
