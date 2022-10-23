@@ -3,6 +3,7 @@ import { getLogsRoute } from './routes/logs';
 import { getNamespacesRoute } from './routes/namespaces';
 import { getPodsRoute } from './routes/pods';
 import cors from '@fastify/cors';
+import { getActivityRoute } from './routes/activity';
 
 
 const server: FastifyInstance = Fastify({});
@@ -16,6 +17,7 @@ server.addHook('preHandler', (req, res, done) => {
 server.route(getLogsRoute);
 server.route(getNamespacesRoute);
 server.route(getPodsRoute);
+server.route(getActivityRoute);
 
 
 

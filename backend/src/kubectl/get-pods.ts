@@ -8,6 +8,16 @@ interface Pod {
         started_at: string;
         status: string;
         name: string;
+        resources: {
+            limits: {
+                cpu: string;
+                memory: string;
+            };
+            requests: {
+                cpu: string;
+                memory: string;
+            };
+        };
     }[]
 }
 
@@ -21,11 +31,11 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
 
         for (const pod of podsRaw.items) {
             const containers = pod.spec.containers
-                .map((container:any) => {
+                .map((container: any) => {
                     const containerStatus = pod
                         .status
                         ?.containerStatuses
-                        ?.find((containerStatus:any) => containerStatus.name == container.name);
+                        ?.find((containerStatus: any) => containerStatus.name == container.name);
 
                     let status = 'unknown';
                     let started_at = 'unknown';
@@ -36,7 +46,7 @@ export async function getPods(namespace?: string): Promise<Pod[]> {
                         restarts_count = containerStatus.restartCount;
                     }
                     return {
-                        resources:container.resources,
+                        resources: container.resources,
                         name: container.name,
                         restarts_count,
                         started_at,
