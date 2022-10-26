@@ -6,6 +6,8 @@ process.on('message', async function (config) {
     if (!!config?.since) {
         cmd += ` --since-time ${config.since}`;
     }
+
+    try {        
     const logs = await execCmd(cmd);
     let jsonLogs = {};
 
@@ -26,6 +28,10 @@ process.on('message', async function (config) {
                 haveContent = true;
             }
         }
+    }
+
+    } catch (error) {
+        console.log(config.podName, error);
     }
 
     process.send(haveContent ? jsonLogs : {});
