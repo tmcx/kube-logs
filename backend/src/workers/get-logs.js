@@ -6,6 +6,9 @@ process.on('message', async function (config) {
     if (!!config?.since) {
         cmd += ` --since-time ${config.since}`;
     }
+    if (!!config?.until) {
+        cmd += ` | awk '$0 < "${until}"'`;
+    }
     let haveContent = false;
     let jsonLogs = {};
 

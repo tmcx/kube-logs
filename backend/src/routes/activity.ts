@@ -14,6 +14,7 @@ const getActivityRoute: RouteOptions = {
 
 
             const sinceTime = new Date((new Date().getTime() - (since * 60 * 1000))).toISOString();
+            const nowTime = new Date().toISOString();
             const groupBy = Number((req.query as any).group_by) || 10;
 
             let pods = await getPods(namespace);
@@ -34,7 +35,7 @@ const getActivityRoute: RouteOptions = {
                 const promises = group.map((pod) =>
                     new Promise<void>(async (resolve, reject) => {
                         console.log(pod.name);
-                        const podLogs = await getPodLogs(pod, pod.namespace, sinceTime);
+                        const podLogs = await getPodLogs(pod, pod.namespace, sinceTime, nowTime);
                         if (Object.keys(podLogs).length > 0) {
                             activePodsLogs[pod.name] = podLogs;
                         }

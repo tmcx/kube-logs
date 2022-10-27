@@ -5,7 +5,7 @@ import { fork } from 'child_process';
 type Log = { [key: number]: string }
 export type Logs = { [key: string]: Log };
 
-export async function getPodLogs(pod: Pod | string, namespace: string, since: string = ''): Promise<Logs> {
+export async function getPodLogs(pod: Pod | string, namespace: string, since: string = '', until: string = ''): Promise<Logs> {
     try {
         let containers = [];
         let podName = '';
@@ -27,7 +27,7 @@ export async function getPodLogs(pod: Pod | string, namespace: string, since: st
                 child.on('message', function (message: any) {
                     resolve(message);
                 });
-                child.send({ podName, namespace, containerName, since });
+                child.send({ podName, namespace, containerName, since, until });
 
             })
             if (Object.keys(logs).length > 0 && !haveLogs) {
