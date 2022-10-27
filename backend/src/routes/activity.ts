@@ -9,21 +9,25 @@ const getActivityRoute: RouteOptions = {
     handler: async (req: FastifyRequest, res: FastifyReply) => {
         try {
             const since = Number((req.query as any).min_since) || 1;
-            const namespace = (req.query as any).include_namespace || undefined;
+            const namespace = (req.query as any).specific_namespace || undefined;
             const ignoreNamespace = (req.query as any)?.ignore_namespace?.split(',') || undefined;
 
 
             const sinceTime = new Date((new Date().getTime() - (since * 60 * 1000))).toISOString();
-
             const groupBy = Number((req.query as any).group_by) || 10;
-            console.log(typeof groupBy, groupBy, (req.query as any).group_by);
+
             let pods = await getPods(namespace);
             const activePodsLogs: { [key: string]: Logs } = {};
-            pods = pods.filter((pod) => ignoreNamespace.includes(pod.name));
+            pods = pods.filter((pod) => !ignoreNamespace.includes(pod.name));
             const totalPods = pods.length;
+
+            console.log('Specific namespace:', (namespace) ? namespace : 'None');
+            console.log('Ignore namespaces:', (ignoreNamespace.length > 0) ? ignoreNamespace : 'None');
+            console.log('From', sinceTime, (req.query as any).min_since, 'min');
             console.log('Total pods: ', totalPods);
+
+
             let i = 1;
-            console.log(sinceTime, (req.query as any).min_since);
             const groupOfPods = groupByN<Pod>(groupBy, pods);
 
             for (const group of groupOfPods) {
