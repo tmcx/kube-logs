@@ -7,10 +7,10 @@ process.on('message', async function (config) {
         cmd += ` --since-time ${config.since}`;
     }
     let haveContent = false;
+    let jsonLogs = {};
 
     try {        
     const logs = await execCmd(cmd);
-    let jsonLogs = {};
 
     let logsSplitted = logs.split('\n');
     logsSplitted.pop();
