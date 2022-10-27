@@ -6,6 +6,7 @@ process.on('message', async function (config) {
     if (!!config?.since) {
         cmd += ` --since-time ${config.since}`;
     }
+    let haveContent = false;
 
     try {        
     const logs = await execCmd(cmd);
@@ -15,7 +16,6 @@ process.on('message', async function (config) {
     logsSplitted.pop();
     logsSplitted.shift();
 
-    let haveContent = false;
 
     for (const line of logs.split('\n')) {
         const endDateRange = line.indexOf(' ');
