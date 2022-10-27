@@ -25,6 +25,7 @@ const getActivityRoute: RouteOptions = {
             console.log('Specific namespace:', (namespace) ? namespace : 'None');
             console.log('Ignore namespaces:', (ignoreNamespace.length > 0) ? ignoreNamespace : 'None');
             console.log('From', sinceTime, (req.query as any).min_since, 'min');
+            console.log('Until', nowTime);
             console.log('Total pods: ', totalPods);
 
 
